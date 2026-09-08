@@ -99,7 +99,7 @@ function Home() {
               <p className="eyebrow text-muted-foreground">Browse</p>
               <h2 className="mt-2 text-3xl">Shop by category</h2>
             </div>
-            <Link to="/shop" className="shrink-0 text-sm text-primary hover:text-accent">
+            <Link to="/categories" className="shrink-0 text-sm text-primary hover:text-accent">
               View all →
             </Link>
           </div>

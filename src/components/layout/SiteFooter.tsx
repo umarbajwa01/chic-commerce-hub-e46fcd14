@@ -1,10 +1,80 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 
-const columns = [
-  { title: "Shop", links: ["New arrivals", "Men", "Women", "Accessories"] },
-  { title: "Support", links: ["Shipping policy", "Returns", "FAQ", "Size guide"] },
-  { title: "Company", links: ["Our story", "Sustainability", "Contact", "Terms"] },
+type FooterLink = { label: string; el: React.ReactNode };
+
+const columns: { title: string; links: FooterLink[] }[] = [
+  {
+    title: "Shop",
+    links: [
+      {
+        label: "New arrivals",
+        el: (
+          <Link to="/shop" search={{ sort: "newest" }} className="transition-colors hover:text-accent">
+            New arrivals
+          </Link>
+        ),
+      },
+      {
+        label: "Men",
+        el: (
+          <Link
+            to="/category/$slug"
+            params={{ slug: "men" }}
+            className="transition-colors hover:text-accent"
+          >
+            Men
+          </Link>
+        ),
+      },
+      {
+        label: "Women",
+        el: (
+          <Link
+            to="/category/$slug"
+            params={{ slug: "women" }}
+            className="transition-colors hover:text-accent"
+          >
+            Women
+          </Link>
+        ),
+      },
+      {
+        label: "Accessories",
+        el: (
+          <Link
+            to="/category/$slug"
+            params={{ slug: "accessories" }}
+            className="transition-colors hover:text-accent"
+          >
+            Accessories
+          </Link>
+        ),
+      },
+    ],
+  },
+  {
+    title: "Support",
+    links: ["Shipping policy", "Returns", "FAQ", "Size guide"].map((l) => ({
+      label: l,
+      el: (
+        <Link to="/" className="transition-colors hover:text-accent">
+          {l}
+        </Link>
+      ),
+    })),
+  },
+  {
+    title: "Company",
+    links: ["Our story", "Sustainability", "Contact", "Terms"].map((l) => ({
+      label: l,
+      el: (
+        <Link to="/" className="transition-colors hover:text-accent">
+          {l}
+        </Link>
+      ),
+    })),
+  },
 ];
 
 export function SiteFooter() {
