@@ -105,11 +105,7 @@ export function SiteFooter() {
             <h3 className="eyebrow text-accent">{col.title}</h3>
             <ul className="mt-4 space-y-2.5 text-sm text-primary-foreground/75">
               {col.links.map((l) => (
-                <li key={l}>
-                  <Link to="/" className="transition-colors hover:text-accent">
-                    {l}
-                  </Link>
-                </li>
+                <li key={l.label}>{l.el}</li>
               ))}
             </ul>
           </div>
