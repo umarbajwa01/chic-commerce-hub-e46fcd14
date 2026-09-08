@@ -1,13 +1,16 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { categories } from "@/data/catalog";
+import { useWishlist } from "@/lib/wishlist";
 
 const nav = [
-  { label: "Home", to: "/" },
-  { label: "Shop", to: "/" },
-  { label: "Categories", to: "/" },
-  { label: "About", to: "/" },
-  { label: "Contact", to: "/" },
+  { label: "Home", to: "/" as const },
+  { label: "Shop", to: "/shop" as const },
+  { label: "Categories", to: "/categories" as const },
+  { label: "About", to: "/" as const },
+  { label: "Contact", to: "/" as const },
 ];
 
 function Logo() {
@@ -26,6 +29,22 @@ function Logo() {
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const wishlist = useWishlist();
+
+  useEffect(() => {
+    if (searchOpen) inputRef.current?.focus();
+  }, [searchOpen]);
+
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchOpen(false);
+    setOpen(false);
+    navigate({ to: "/search", search: { q: query.trim() } });
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur">
@@ -55,7 +74,7 @@ export function SiteHeader() {
             aria-expanded={open}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full hover:bg-secondary lg:hidden"
           >
-            {open ? <Menu className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
           <Logo />
         </div>
@@ -65,6 +84,8 @@ export function SiteHeader() {
             <Link
               key={item.label}
               to={item.to}
+              activeOptions={{ exact: item.to === "/" }}
+              activeProps={{ className: "text-primary" }}
               className="text-sm text-foreground/80 transition-colors hover:text-primary"
             >
               {item.label}
@@ -76,16 +97,23 @@ export function SiteHeader() {
           <button
             type="button"
             aria-label="Search"
+            aria-expanded={searchOpen}
+            onClick={() => setSearchOpen((v) => !v)}
             className="grid h-10 w-10 place-items-center rounded-full hover:bg-secondary"
           >
-            <Search className="h-5 w-5" />
+            {searchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
           </button>
           <Link
             to="/"
-            aria-label="Wishlist"
-            className="hidden h-10 w-10 place-items-center rounded-full hover:bg-secondary sm:grid"
+            aria-label={`Wishlist, ${wishlist.count} items`}
+            className="relative hidden h-10 w-10 place-items-center rounded-full hover:bg-secondary sm:grid"
           >
             <Heart className="h-5 w-5" />
+            {wishlist.count > 0 && (
+              <span className="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-medium text-accent-foreground">
+                {wishlist.count}
+              </span>
+            )}
           </Link>
           <Link
             to="/"
@@ -107,6 +135,37 @@ export function SiteHeader() {
         </div>
       </div>
 
+      {searchOpen && (
+        <div className="border-t border-border bg-background">
+          <form role="search" onSubmit={submitSearch} className="container-page flex gap-2 py-3">
+            <div className="relative min-w-0 flex-1">
+              <label htmlFor="header-search" className="sr-only">
+                Search products
+              </label>
+              <Search
+                aria-hidden
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              />
+              <input
+                id="header-search"
+                ref={inputRef}
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search for jackets, knitwear, shoes…"
+                className="w-full rounded-sm border border-border bg-background py-2.5 pl-9 pr-3 text-sm outline-none focus-visible:border-primary"
+              />
+            </div>
+            <button
+              type="submit"
+              className="shrink-0 rounded-sm bg-primary px-5 py-2.5 text-sm text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      )}
+
       {open && (
         <div className="border-t border-border bg-background lg:hidden">
           <nav aria-label="Mobile" className="container-page flex flex-col py-2">
@@ -118,9 +177,21 @@ export function SiteHeader() {
                 className="flex items-center justify-between border-b border-border/60 py-3 text-sm last:border-0"
               >
                 {item.label}
-                <X className="h-4 w-4 rotate-45 opacity-30" aria-hidden />
               </Link>
             ))}
+            <div className="flex flex-wrap gap-2 py-3">
+              {categories.map((c) => (
+                <Link
+                  key={c.slug}
+                  to="/category/$slug"
+                  params={{ slug: c.slug }}
+                  onClick={() => setOpen(false)}
+                  className="rounded-full border border-border px-3 py-1.5 text-xs"
+                >
+                  {c.name}
+                </Link>
+              ))}
+            </div>
           </nav>
         </div>
       )}

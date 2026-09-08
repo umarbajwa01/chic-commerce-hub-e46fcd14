@@ -52,13 +52,13 @@ function Home() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  to="/"
+                  to="/shop"
                   className="inline-flex items-center gap-2 rounded-sm bg-primary px-7 py-3 text-sm text-primary-foreground transition-opacity hover:opacity-90"
                 >
                   Shop now <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  to="/"
+                  to="/categories"
                   className="inline-flex items-center gap-2 rounded-sm border border-primary/30 px-7 py-3 text-sm transition-colors hover:bg-primary/5"
                 >
                   Explore lookbook
@@ -99,7 +99,7 @@ function Home() {
               <p className="eyebrow text-muted-foreground">Browse</p>
               <h2 className="mt-2 text-3xl">Shop by category</h2>
             </div>
-            <Link to="/" className="shrink-0 text-sm text-primary hover:text-accent">
+            <Link to="/shop" className="shrink-0 text-sm text-primary hover:text-accent">
               View all →
             </Link>
           </div>
@@ -108,7 +108,8 @@ function Home() {
             {categories.map((c) => (
               <Link
                 key={c.slug}
-                to="/"
+                to="/category/$slug"
+                params={{ slug: c.slug }}
                 className="group relative overflow-hidden rounded-md bg-secondary shadow-soft"
               >
                 <img
@@ -149,7 +150,8 @@ function Home() {
                   Up to 30% off selected outerwear, footwear and accessories.
                 </p>
                 <Link
-                  to="/"
+                  to="/shop"
+                  search={{ sort: "price-asc" }}
                   className="mt-6 inline-flex items-center gap-2 rounded-sm bg-accent px-6 py-3 text-sm text-accent-foreground transition-opacity hover:opacity-90"
                 >
                   Explore deals <ArrowRight className="h-4 w-4" />
@@ -166,7 +168,7 @@ function Home() {
               <p className="eyebrow text-muted-foreground">Curated</p>
               <h2 className="mt-2 text-3xl">Featured products</h2>
             </div>
-            <Link to="/" className="shrink-0 text-sm text-primary hover:text-accent">
+            <Link to="/shop" className="shrink-0 text-sm text-primary hover:text-accent">
               View all →
             </Link>
           </div>
@@ -185,7 +187,7 @@ function Home() {
                 <p className="eyebrow text-muted-foreground">Loved most</p>
                 <h2 className="mt-2 text-3xl">Best sellers</h2>
               </div>
-              <Link to="/" className="shrink-0 text-sm text-primary hover:text-accent">
+              <Link to="/shop" className="shrink-0 text-sm text-primary hover:text-accent">
                 View all →
               </Link>
             </div>
