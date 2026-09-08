@@ -1,7 +1,12 @@
 import { Heart, Star } from "lucide-react";
 import type { Product } from "@/data/catalog";
+import { useWishlist } from "@/lib/wishlist";
+import { cn } from "@/lib/utils";
 
 export function ProductCard({ product }: { product: Product }) {
+  const wishlist = useWishlist();
+  const saved = wishlist.has(product.id);
+
   return (
     <article className="group flex flex-col overflow-hidden rounded-md border border-border/70 bg-card shadow-soft transition-shadow duration-300 hover:shadow-lift">
       <div className="relative aspect-square overflow-hidden bg-secondary">
@@ -20,10 +25,15 @@ export function ProductCard({ product }: { product: Product }) {
         )}
         <button
           type="button"
-          aria-label={`Add ${product.name} to wishlist`}
-          className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/90 text-foreground/70 transition-colors hover:text-destructive"
+          aria-pressed={saved}
+          aria-label={saved ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+          onClick={() => wishlist.toggle(product.id)}
+          className={cn(
+            "absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-background/90 transition-colors hover:text-destructive",
+            saved ? "text-destructive" : "text-foreground/70",
+          )}
         >
-          <Heart className="h-4 w-4" />
+          <Heart className={cn("h-4 w-4", saved && "fill-current")} />
         </button>
         {!product.inStock && (
           <span className="absolute inset-x-0 bottom-0 bg-foreground/75 py-1.5 text-center text-[11px] uppercase tracking-widest text-background">
