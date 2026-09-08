@@ -1,7 +1,7 @@
 # Verdane — build roadmap
 
 - [x] Phase 1 — Foundation, design system, navigation, footer, home page
-- [ ] Phase 2 — Categories, shop listing, search, filters, sorting
+- [x] Phase 2 — Categories, shop listing, search, filters, sorting
 - [ ] Phase 3 — Product details, gallery, variants, related products
 - [ ] Phase 4 — Cart, coupons, checkout, order confirmation
 - [ ] Phase 5 — Customer authentication (Cloud)
