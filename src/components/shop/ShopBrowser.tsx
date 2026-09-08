@@ -257,7 +257,37 @@ export function ShopBrowser({
         </div>
 
         {filtersOpen && (
-          <div className="mt-4 rounded-md border border-border bg-card p-4 lg:hidden">{filters}</div>
+          <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Filters">
+            <button
+              type="button"
+              aria-label="Close filters"
+              onClick={() => setFiltersOpen(false)}
+              className="absolute inset-0 bg-foreground/40"
+            />
+            <div className="absolute inset-y-0 right-0 flex w-[86%] max-w-sm flex-col bg-background shadow-lift">
+              <div className="flex items-center justify-between border-b border-border px-5 py-4">
+                <h2 className="font-display text-lg">Filters</h2>
+                <button
+                  type="button"
+                  onClick={() => setFiltersOpen(false)}
+                  aria-label="Close filters"
+                  className="grid h-9 w-9 place-items-center rounded-full hover:bg-secondary"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto px-5 py-4">{filters}</div>
+              <div className="border-t border-border p-4">
+                <button
+                  type="button"
+                  onClick={() => setFiltersOpen(false)}
+                  className="w-full rounded-sm bg-primary py-3 text-sm text-primary-foreground"
+                >
+                  Show {results.length} results
+                </button>
+              </div>
+            </div>
+          </div>
         )}
 
         <p className="mt-5 text-sm text-muted-foreground" aria-live="polite">
